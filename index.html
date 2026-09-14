@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySpace.com - Din Djarin (The Mandalorian) - 2005</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="starfield-canvas"></canvas>
+
+    <!-- Top MySpace Nav Bar -->
+    <header class="top-nav">
+        <div class="top-nav-inner">
+            <div class="brand">
+                <span class="myspace-logo">MySpace.com</span>
+                <span class="tagline">| Komunita pro přátele</span>
+            </div>
+            <div class="nav-search">
+                <input type="text" placeholder="Hledat na MySpace..." value="Lovec Odměn">
+                <button>Hledat</button>
+            </div>
+            <nav class="nav-links">
+                <a href="#">Domů</a> |
+                <a href="#">Procházet</a> |
+                <a href="#">Hledat</a> |
+                <a href="#">Pozvat</a> |
+                <a href="#">Filmy</a> |
+                <a href="#">Pošta</a> |
+                <a href="#">Blog</a> |
+                <a href="#">Fórum</a> |
+                <a href="#">Hudba</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Retro Marquee Banner -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            ★ ★ ★ VÍTEJTE NA OFICIÁLNÍ MYSPACE STRÁNCE MANDALORIANA ★ THIS IS THE WAY ★ LOVECKÉ ZAKÁZKY PŘIJÍMÁM NA NEVARRO ★ S NÁMI JE CESTA! ★ ★ ★
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="myspace-container">
+
+        <!-- Left Column -->
+        <aside class="left-col">
+            <h1 class="user-name">Din Djarin</h1>
+            <div class="user-subtitle">"The Mandalorian"</div>
+
+            <!-- Avatar -->
+            <div class="profile-pic-box">
+                <img src="assets/mandalorian.jpg" alt="Din Djarin - Mandalorian" class="profile-pic">
+                <p class="gender-age">Muž, 35 let<br>Mandalore / Nevarro</p>
+                <p class="online-now">
+                    <span class="online-icon"></span> <strong>ONLINE SEZNAM!</strong>
+                </p>
+
+                <div class="profile-views">
+                    Zobrazení profilu: <strong>84 291</strong>
+                </div>
+            </div>
+
+            <!-- Extended Network Box -->
+            <div class="extended-network">
+                Din Djarin je ve vaší <strong>širší síti přátel</strong> (1. stupeň)
+            </div>
+
+            <!-- Mood / Quote Box -->
+            <div class="box mood-box">
+                <h3>Aktuální stav & Nálada</h3>
+                <p><strong>Nálada:</strong> <span class="mood-highlight">Odhodlaný 🛡️</span></p>
+                <p><strong>Písnička dně:</strong> Ludwig Göransson - The Mandalorian Theme</p>
+                <p><strong>Motto:</strong> <em>"Toto je Cesta (This is the Way)."</em></p>
+            </div>
+
+            <!-- Contact Box -->
+            <div class="box contact-box">
+                <h3>Kontaktovat Din Djarina</h3>
+                <div class="contact-grid">
+                    <button class="contact-btn" id="btn-send-msg">✉️ Poslat zprávu</button>
+                    <button class="contact-btn" id="btn-add-friend">➕ Přidat do Přátel</button>
+                    <button class="contact-btn" id="btn-add-fav">⭐ Přidat do Oblíbených</button>
+                    <button class="contact-btn" id="btn-block">🚫 Blokovat uživatele</button>
+                    <button class="contact-btn" id="btn-im">💬 Okamžitá zpráva (IM)</button>
+                    <button class="contact-btn" id="btn-forward">✉️ Preposlat příteli</button>
+                </div>
+            </div>
+
+            <!-- MySpace URL -->
+            <div class="box url-box">
+                <h3>MySpace URL:</h3>
+                <p class="url-text">http://www.myspace.com/mandalorian_bounty_hunter</p>
+            </div>
+
+            <!-- Profile Details Box -->
+            <div class="box details-box">
+                <h3>Detaily profilu Din Djarina</h3>
+                <table class="details-table">
+                    <tr>
+                        <td class="label">Status:</td>
+                        <td>Na cestě za odměnami</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Povolání:</td>
+                        <td>Lovec odměn / Cech lovců</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Znamení:</td>
+                        <td>Beskar / Mandalorijec</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Orientační bod:</td>
+                        <td>Lod' Razor Crest (RIP) / N-1 Starfighter</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Chráněnec:</td>
+                        <td>Grogu (Dítě)</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Kouření/Pití:</td>
+                        <td>Nikdy pod helmou / Pouze v soukromí</td>
+                    </tr>
+                </table>
+            </div>
+        </aside>
+
+        <!-- Right Column -->
+        <main class="right-col">
+
+            <!-- Headline / Sub-header -->
+            <div class="headline-banner">
+                <h2>Cesta Mandaloriana – Oficiální Profil (2005 Edice)</h2>
+            </div>
+
+            <!-- Simulated 2005 Flash Music Player Widget -->
+            <div class="box music-player-box">
+                <div class="player-header">
+                    <span class="flash-logo">⚡ Flash Player 8.0</span>
+                    <span class="player-title">MySpace Music Player - Mandalorian Soundtrack</span>
+                </div>
+                <div class="player-body">
+                    <div class="player-track-info">
+                        <span class="track-title" id="track-title">Ludwig Göransson - The Mandalorian Main Theme</span>
+                        <span class="track-time" id="track-time">0:00 / 3:15</span>
+                    </div>
+                    <div class="visualizer">
+                        <div class="bar bar-1"></div>
+                        <div class="bar bar-2"></div>
+                        <div class="bar bar-3"></div>
+                        <div class="bar bar-4"></div>
+                        <div class="bar bar-5"></div>
+                        <div class="bar bar-6"></div>
+                        <div class="bar bar-7"></div>
+                        <div class="bar bar-8"></div>
+                    </div>
+                    <div class="progress-bg" id="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    <div class="player-controls">
+                        <button id="play-btn" class="player-btn">▶ PLAY</button>
+                        <button id="pause-btn" class="player-btn">⏸ PAUSE</button>
+                        <button id="stop-btn" class="player-btn">⏹ STOP</button>
+                        <span class="volume-label">Hlasitost: 80%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Me Box -->
+            <div class="box bio-box">
+                <h3 class="section-title">O mně (About Me)</h3>
+                <p>
+                    Ahoj, jsem <strong>Din Djarin</strong>, známý též jednoduše jako <em>Mando</em>. Pocházím z Cesty Mandaloriana a držím se starodávného kodexu našich předků.
+                </p>
+                <p>
+                    Většinu času trávím plněním zakázek pro Cech lovců odměn a cestováním po Vnějším okraji galaxie. Mým nejdůležitějším úkolem a posláním se však stala ochrana malého <strong>Grogu</strong> (přezdívaného Dítě), kterého jsem zachránil před zbytky Impéria.
+                </p>
+                <p>
+                    <strong>Moje pravidla:</strong>
+                </p>
+                <ul>
+                    <li>Nikdy nesundávám svou helmu před jinou živou bytostí.</li>
+                    <li>Slib danej lovci odměn platí do poslední kapky krve.</li>
+                    <li>Beskar patří výhradně do rukou Mandalorianů.</li>
+                </ul>
+            </div>
+
+            <!-- Who I'd like to meet Box -->
+            <div class="box meet-box">
+                <h3 class="section-title">Koho bych chtěl potkat (Who I'd Like to Meet)</h3>
+                <p>
+                    Každého čestného Mandaloriana, spolehlivé spojence v galaxii a někoho, kdo má informace o původu Jediů a síly, ze které pochází Grogu.
+                </p>
+                <p>
+                    <em>Zbytky Impéria, Moff Gideon a zrádci nechť se raději vyhýbají mému hledí. Mám pro ně připravený plamenomet a svůj blaster.</em>
+                </p>
+            </div>
+
+            <!-- Top 8 Friends Space -->
+            <div class="box friends-box">
+                <h3 class="section-title">Din Djarin's Friend Space (Top 8)</h3>
+                <p class="friends-count">Din Djarin má <strong>8</strong> přátel v Top síti.</p>
+
+                <div class="top8-grid">
+                    <!-- Friend 1 -->
+                    <div class="friend-card">
+                        <a href="#grogu"><span class="friend-name">Grogu (Baby Yoda)</span></a>
+                        <img src="assets/grogu.jpg" alt="Grogu" class="friend-img">
+                        <p class="friend-status">"Nejlepší parťák"</p>
+                    </div>
+
+                    <!-- Friend 2 -->
+                    <div class="friend-card">
+                        <a href="#boba"><span class="friend-name">Boba Fett</span></a>
+                        <img src="assets/boba_fett.jpg" alt="Boba Fett" class="friend-img">
+                        <p class="friend-status">"Vládce Tatooinu"</p>
+                    </div>
+
+                    <!-- Friend 3 -->
+                    <div class="friend-card">
+                        <a href="#bokatan"><span class="friend-name">Bo-Katan Kryze</span></a>
+                        <img src="assets/bokatan.jpg" alt="Bo-Katan Kryze" class="friend-img">
+                        <p class="friend-status">"Vůdkyně Mandalore"</p>
+                    </div>
+
+                    <!-- Friend 4 -->
+                    <div class="friend-card">
+                        <a href="#ahsoka"><span class="friend-name">Ahsoka Tano</span></a>
+                        <img src="assets/ahsoka.jpg" alt="Ahsoka Tano" class="friend-img">
+                        <p class="friend-status">"Rytířka Jedi"</p>
+                    </div>
+
+                    <!-- Friend 5 -->
+                    <div class="friend-card">
+                        <a href="#greef"><span class="friend-name">Greef Karga</span></a>
+                        <img src="assets/greef_karga.jpg" alt="Greef Karga" class="friend-img">
+                        <p class="friend-status">"Magistrát Nevarro"</p>
+                    </div>
+
+                    <!-- Friend 6 -->
+                    <div class="friend-card">
+                        <a href="#cara"><span class="friend-name">Cara Dune</span></a>
+                        <img src="assets/cara_dune.jpg" alt="Cara Dune" class="friend-img">
+                        <p class="friend-status">"Plošná bojovnice"</p>
+                    </div>
+
+                    <!-- Friend 7 -->
+                    <div class="friend-card">
+                        <a href="#kuiil"><span class="friend-name">Kuiil</span></a>
+                        <img src="assets/kuiil.jpg" alt="Kuiil" class="friend-img">
+                        <p class="friend-status">"Promluvil jsem!"</p>
+                    </div>
+
+                    <!-- Friend 8 -->
+                    <div class="friend-card">
+                        <a href="#ig11"><span class="friend-name">IG-11</span></a>
+                        <img src="assets/ig11.jpg" alt="IG-11" class="friend-img">
+                        <p class="friend-status">"Ošetřovatelský droid"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="box comments-box">
+                <h3 class="section-title">Komentáře (Din Djarin's Comments)</h3>
+                <p class="comments-count">Zobrazeno <strong>3</strong> z 152 komentářů</p>
+
+                <!-- Comment List -->
+                <div id="comments-list">
+                    <div class="comment-item">
+                        <div class="comment-author">
+                            <strong>Grogu</strong><br>
+                            <span class="comment-date">14. září 2005 v 14:22</span>
+                        </div>
+                        <div class="comment-content">
+                            <p>Patuu! 🍪 (Díky za ty modré sušenky Mando, byly super!)</p>
+                        </div>
+                    </div>
+
+                    <div class="comment-item">
+                        <div class="comment-author">
+                            <strong>Boba Fett</strong><br>
+                            <span class="comment-date">12. září 2005 v 09:15</span>
+                        </div>
+                        <div class="comment-content">
+                            <p>Díky za pomoc v Jabbově paláci na Tatooinu. Kdykoliv budeš potřebovat posily, ozvi se na MySpace!</p>
+                        </div>
+                    </div>
+
+                    <div class="comment-item">
+                        <div class="comment-author">
+                            <strong>Greef Karga</strong><br>
+                            <span class="comment-date">10. září 2005 v 18:40</span>
+                        </div>
+                        <div class="comment-content">
+                            <p>Mám pro tebe v Cechu novou zakázku s vysokou odměnou v Beskaru. Zastav se na Nevarru!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Comment Form -->
+                <div class="add-comment-form">
+                    <h4>Napsat komentář Din Djarinovi:</h4>
+                    <input type="text" id="comment-author-input" placeholder="Tvoje jméno / Nickname" class="form-control">
+                    <textarea id="comment-text-input" placeholder="Tvoje zpráva pro Mandaloriana..." rows="3" class="form-control"></textarea>
+                    <button id="submit-comment-btn" class="submit-btn">Odeslat Komentář</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2003-2005 MySpace.com. Všechna práva vyhrazena. | Stránka spravována Din Djarinem.</p>
+        <p><a href="#">O nás</a> | <a href="#">Podmínky</a> | <a href="#">Ochrana soukromí</a> | <a href="#">Nápověda</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

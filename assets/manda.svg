@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </radialGradient>
+    <linearGradient id="beskar" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="30%" stop-color="#94a3b8"/>
+      <stop offset="70%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="neonGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="300" height="300" fill="url(#bgGrad)"/>
+  <circle cx="150" cy="150" r="140" fill="none" stroke="#00f3ff" stroke-width="2" opacity="0.4"/>
+
+  <!-- Armor / Shoulders -->
+  <path d="M 40 300 L 70 210 L 150 230 L 230 210 L 260 300 Z" fill="url(#beskar)" stroke="#00f3ff" stroke-width="1.5"/>
+
+  <!-- Helmet Outer Silhouette -->
+  <path d="M 75 140 C 75 50, 225 50, 225 140 L 220 230 C 180 250, 120 250, 80 230 Z" fill="url(#beskar)" stroke="#00f3ff" stroke-width="2"/>
+
+  <!-- Helmet Ridge -->
+  <path d="M 150 50 L 150 140" stroke="#cbd5e1" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- T-Visor Frame (Bounty Hunter Blue Cyan Glow) -->
+  <path d="M 95 130 L 205 130 L 200 155 L 165 155 L 165 215 L 135 215 L 135 155 L 100 155 Z" fill="#020617" stroke="#00f3ff" stroke-width="3" filter="url(#neonGlow)"/>
+
+  <!-- T-Visor Inner Void -->
+  <path d="M 98 133 L 202 133 L 197 152 L 162 152 L 162 212 L 138 212 L 138 152 L 103 152 Z" fill="#000000"/>
+
+  <!-- Visor Cyber Glow Scanline -->
+  <line x1="98" y1="138" x2="202" y2="138" stroke="#00f3ff" stroke-width="3" opacity="0.9" filter="url(#neonGlow)"/>
+  <line x1="150" y1="138" x2="150" y2="210" stroke="#00f3ff" stroke-width="3" opacity="0.9" filter="url(#neonGlow)"/>
+
+  <!-- Beskar Highlights -->
+  <path d="M 85 100 C 95 70, 130 60, 145 60" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.6"/>
+
+  <!-- Mythosaur Crest watermark -->
+  <text x="150" y="285" fill="#ff00ea" font-family="monospace" font-size="12" text-anchor="middle" letter-spacing="3" opacity="0.8">THIS IS THE WAY</text>
+</svg>
