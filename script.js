@@ -10,6 +10,60 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /* ----------------------------------------------------------------------
+       0. Laser Sound Effects (Web Audio API Blaster Sound)
+       ---------------------------------------------------------------------- */
+    let audioCtx = null;
+
+    function initAudioContext() {
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                audioCtx = new AudioContext();
+            }
+        }
+        if (audioCtx && audioCtx.state === "suspended") {
+            audioCtx.resume();
+        }
+    }
+
+    function playLaserSound() {
+        initAudioContext();
+        if (!audioCtx) return;
+
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = "sawtooth";
+
+            const now = audioCtx.currentTime;
+            // Laser pitch frequency drop from 900Hz down to 100Hz
+            osc.frequency.setValueAtTime(900, now);
+            osc.frequency.exponentialRampToValueAtTime(100, now + 0.22);
+
+            // Volume envelope
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.22);
+        } catch (e) {
+            console.error("Laser sound play error:", e);
+        }
+    }
+
+    // Attach laser sound effect to all clickable character elements
+    const clickableCharacters = document.querySelectorAll(".character-clickable");
+    clickableCharacters.forEach(el => {
+        el.addEventListener("click", (e) => {
+            playLaserSound();
+        });
+    });
+
+    /* ----------------------------------------------------------------------
        1. Starfield / Pixel Black Hole Particles Background Canvas
        ---------------------------------------------------------------------- */
     const canvas = document.getElementById("starfield-canvas");
@@ -113,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ----------------------------------------------------------------------
-       3. Simulated Flash Audio Player
+       3. Web Audio Synthesizer Flash Music Player (Mandalorian Theme Motif)
        ---------------------------------------------------------------------- */
     const playBtn = document.getElementById("play-btn");
     const pauseBtn = document.getElementById("pause-btn");
@@ -127,6 +181,45 @@ document.addEventListener("DOMContentLoaded", () => {
     let playbackSeconds = 0;
     const totalSeconds = 195; // 3:15
     let playerTimer = null;
+    let themeSynthesizerInterval = null;
+
+    // Mandalorian bass recorder / synth theme notes (frequencies in Hz)
+    const mandoNotes = [
+        146.83, 146.83, 164.81, 146.83, // D3, D3, E3, D3
+        130.81, 146.83, 110.00,        // C3, D3, A2
+        146.83, 146.83, 164.81, 146.83,
+        174.61, 164.81, 146.83, 130.81
+    ];
+    let noteIndex = 0;
+
+    function playMandoNote() {
+        initAudioContext();
+        if (!audioCtx || !isPlaying) return;
+
+        try {
+            const freq = mandoNotes[noteIndex % mandoNotes.length];
+            noteIndex++;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            const now = audioCtx.currentTime;
+            gain.gain.setValueAtTime(0.01, now);
+            gain.gain.linearRampToValueAtTime(0.25, now + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.4);
+        } catch (e) {
+            console.error("Music synth note error:", e);
+        }
+    }
 
     function formatTime(sec) {
         const m = Math.floor(sec / 60);
@@ -141,11 +234,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function playAudio() {
+        initAudioContext();
         if (isPlaying) return;
         isPlaying = true;
         visualizer.classList.add("playing");
         playBtn.style.background = "#00ffff";
         playBtn.style.color = "#000";
+
+        // Start real Web Audio melody synthesis
+        themeSynthesizerInterval = setInterval(playMandoNote, 420);
 
         playerTimer = setInterval(() => {
             playbackSeconds++;
@@ -163,11 +260,16 @@ document.addEventListener("DOMContentLoaded", () => {
         playBtn.style.background = "#223355";
         playBtn.style.color = "#fff";
         clearInterval(playerTimer);
+        if (themeSynthesizerInterval) {
+            clearInterval(themeSynthesizerInterval);
+            themeSynthesizerInterval = null;
+        }
     }
 
     function stopAudio() {
         pauseAudio();
         playbackSeconds = 0;
+        noteIndex = 0;
         updatePlayerUI();
     }
 
@@ -186,10 +288,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Auto-start simulated player after 1.5 seconds for true 2005 MySpace feel!
+    // Auto-start player on first user interaction or timeout
+    const startAudioOnUserGesture = () => {
+        if (!isPlaying) {
+            playAudio();
+        }
+        document.removeEventListener("click", startAudioOnUserGesture);
+    };
+    document.addEventListener("click", startAudioOnUserGesture);
+
     setTimeout(() => {
         playAudio();
-    }, 1500);
+    }, 1200);
 
     /* ----------------------------------------------------------------------
        4. Interactive Comment Posting
