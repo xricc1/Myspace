@@ -214,13 +214,108 @@ a:hover {
     margin-bottom: 15px;
 }
 
+.profile-avatars-flex {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.mando-avatar-wrapper {
+    flex: 1 1 140px;
+    max-width: 160px;
+}
+
 .profile-pic {
-    width: 200px;
-    height: 200px;
+    width: 100%;
+    height: 160px;
     object-fit: cover;
     border: 3px double #00ffff;
     box-shadow: 0 0 12px rgba(0, 255, 255, 0.6);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.profile-pic:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.9);
+}
+
+.avatar-caption {
+    font-size: 10px;
+    color: #ffaa00;
+    font-weight: bold;
+}
+
+/* Grogu Mini-Card */
+.grogu-mini-card {
+    flex: 1 1 110px;
+    max-width: 130px;
+    background: rgba(10, 40, 25, 0.75);
+    border: 1px solid #00ff66;
+    padding: 6px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.grogu-mini-card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.7);
+    border-color: #ffff00;
+}
+
+.mini-card-header {
+    font-size: 9px;
+    font-weight: bold;
+    color: #00ff66;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.grogu-mini-img {
+    width: 100%;
+    height: 95px;
+    object-fit: cover;
+    border: 1px solid #00ff66;
+    margin-bottom: 4px;
+    border-radius: 2px;
+}
+
+.grogu-mini-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.grogu-mini-info strong {
+    color: #ffffff;
+    font-size: 11px;
+}
+
+.grogu-badge {
+    background: #006633;
+    color: #88ffaa;
+    font-size: 8px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+.grogu-quote {
+    font-size: 9px;
+    color: #ffaa00;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+.character-clickable {
+    cursor: pointer;
 }
 
 .gender-age {
