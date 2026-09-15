@@ -55,6 +55,60 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function playExplosionSound() {
+        initAudioContext();
+        if (!audioCtx) return;
+
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = "sawtooth";
+            const now = audioCtx.currentTime;
+
+            // Pitch drop from 250Hz down to 30Hz
+            osc.frequency.setValueAtTime(250, now);
+            osc.frequency.exponentialRampToValueAtTime(30, now + 0.4);
+
+            // Noise buffer for blast sound
+            const bufferSize = audioCtx.sampleRate * 0.4;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            const noiseFilter = audioCtx.createBiquadFilter();
+            noiseFilter.type = "lowpass";
+            noiseFilter.frequency.setValueAtTime(800, now);
+            noiseFilter.frequency.linearRampToValueAtTime(100, now + 0.4);
+
+            const noiseGain = audioCtx.createGain();
+            noiseGain.gain.setValueAtTime(0.5, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+
+            gain.gain.setValueAtTime(0.4, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            noise.start(now);
+            osc.stop(now + 0.4);
+            noise.stop(now + 0.4);
+        } catch (e) {
+            console.error("Explosion sound error:", e);
+        }
+    }
+
     // Attach laser sound effect to all clickable character elements
     const clickableCharacters = document.querySelectorAll(".character-clickable");
     clickableCharacters.forEach(el => {
@@ -77,27 +131,108 @@ document.addEventListener("DOMContentLoaded", () => {
             height = canvas.height = window.innerHeight;
         });
 
-        // Generate stars
+        // Generate stars for falling starfield
         const stars = [];
-        const numStars = 150;
+        const numStars = 220;
         const colors = ["#00ffff", "#ff00ff", "#ffffff", "#ffaa00", "#0088ff"];
 
         for (let i = 0; i < numStars; i++) {
             stars.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                size: Math.random() < 0.2 ? 3 : (Math.random() < 0.5 ? 2 : 1),
+                size: Math.random() < 0.25 ? 3 : (Math.random() < 0.6 ? 2 : 1),
                 color: colors[Math.floor(Math.random() * colors.length)],
-                speed: 0.2 + Math.random() * 0.8,
+                speed: 1.2 + Math.random() * 2.8,
+                length: Math.random() < 0.3 ? Math.floor(Math.random() * 8 + 4) : 1,
                 alpha: Math.random(),
                 alphaSpeed: 0.01 + Math.random() * 0.03
             });
         }
 
+        /* ------------------------------------------------------------------
+           Meteorite System (Spawns every ~10s, diagonal trajectory, clickable explosion)
+           ------------------------------------------------------------------ */
+        let meteor = null;
+        let lastMeteorTime = Date.now();
+        const meteorInterval = 10000; // 10 seconds
+        const explosionParticles = [];
+
+        function spawnMeteor() {
+            const startX = Math.random() * (width * 0.6);
+            const startY = -40;
+            const angle = Math.PI / 4 + (Math.random() * 0.2 - 0.1); // ~45 degrees diagonal
+            const speed = 6 + Math.random() * 3;
+
+            meteor = {
+                x: startX,
+                y: startY,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                radius: 12,
+                trail: [],
+                active: true
+            };
+            lastMeteorTime = Date.now();
+        }
+
+        // Spawn first meteor after 3 seconds
+        setTimeout(spawnMeteor, 3000);
+
+        function triggerMeteorExplosion(x, y) {
+            playExplosionSound();
+            meteor = null;
+            lastMeteorTime = Date.now();
+
+            const pColors = ["#ff3300", "#ffaa00", "#ffff00", "#00ffff", "#ff00ff", "#ffffff"];
+            for (let i = 0; i < 45; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 1.5 + Math.random() * 6;
+                explosionParticles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: Math.random() * 5 + 2,
+                    color: pColors[Math.floor(Math.random() * pColors.length)],
+                    life: 1.0,
+                    decay: 0.02 + Math.random() * 0.03
+                });
+            }
+        }
+
+        // Canvas mouse interactivity for meteor hover/click
+        canvas.addEventListener("mousemove", (e) => {
+            if (!meteor || !meteor.active) {
+                canvas.style.cursor = "default";
+                return;
+            }
+            const dx = e.clientX - meteor.x;
+            const dy = e.clientY - meteor.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist <= meteor.radius + 15) {
+                canvas.style.cursor = "pointer";
+            } else {
+                canvas.style.cursor = "default";
+            }
+        });
+
+        canvas.addEventListener("click", (e) => {
+            if (!meteor || !meteor.active) return;
+            const dx = e.clientX - meteor.x;
+            const dy = e.clientY - meteor.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist <= meteor.radius + 15) {
+                triggerMeteorExplosion(meteor.x, meteor.y);
+                canvas.style.cursor = "default";
+            }
+        });
+
         function drawStarfield() {
             ctx.clearRect(0, 0, width, height);
 
-            // Draw pixel stars
+            // Draw pixel stars falling continuously
             stars.forEach(star => {
                 star.alpha += star.alphaSpeed;
                 if (star.alpha > 1 || star.alpha < 0.2) {
@@ -107,17 +242,118 @@ document.addEventListener("DOMContentLoaded", () => {
                 ctx.save();
                 ctx.globalAlpha = Math.abs(star.alpha);
                 ctx.fillStyle = star.color;
-                // Render as retro square pixels
-                ctx.fillRect(star.x, star.y, star.size, star.size);
+
+                if (star.length > 1) {
+                    // Slight vertical streak for falling star effect
+                    ctx.fillRect(star.x, star.y, star.size, star.length);
+                } else {
+                    // Render as retro square pixels
+                    ctx.fillRect(star.x, star.y, star.size, star.size);
+                }
                 ctx.restore();
 
-                // Gentle drift
-                star.y += star.speed * 0.3;
+                // Continuous falling downwards motion
+                star.y += star.speed;
                 if (star.y > height) {
-                    star.y = 0;
+                    star.y = -10;
                     star.x = Math.random() * width;
                 }
             });
+
+            // Check if time to spawn new meteor
+            if (!meteor && Date.now() - lastMeteorTime >= meteorInterval) {
+                spawnMeteor();
+            }
+
+            // Draw and update active meteor
+            if (meteor && meteor.active) {
+                // Save trail
+                meteor.trail.push({ x: meteor.x, y: meteor.y, alpha: 1.0 });
+                if (meteor.trail.length > 25) {
+                    meteor.trail.shift();
+                }
+
+                // Draw flaming trail
+                meteor.trail.forEach((t, index) => {
+                    t.alpha -= 0.035;
+                    if (t.alpha > 0) {
+                        ctx.save();
+                        ctx.globalAlpha = Math.max(0, t.alpha);
+                        const trailSize = meteor.radius * (index / meteor.trail.length);
+
+                        // Fire colors gradient in trail
+                        const gradient = ctx.createRadialGradient(t.x, t.y, 0, t.x, t.y, trailSize * 1.5);
+                        gradient.addColorStop(0, "#ffffff");
+                        gradient.addColorStop(0.3, "#ffcc00");
+                        gradient.addColorStop(0.7, "#ff3300");
+                        gradient.addColorStop(1, "rgba(255, 0, 0, 0)");
+
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(t.x, t.y, trailSize * 1.5, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                });
+
+                // Update meteor position
+                meteor.x += meteor.vx;
+                meteor.y += meteor.vy;
+
+                // Draw meteor head
+                ctx.save();
+                ctx.shadowColor = "#ffaa00";
+                ctx.shadowBlur = 18;
+
+                // Glow aura
+                const headGradient = ctx.createRadialGradient(meteor.x, meteor.y, 2, meteor.x, meteor.y, meteor.radius + 6);
+                headGradient.addColorStop(0, "#ffffff");
+                headGradient.addColorStop(0.4, "#ffaa00");
+                headGradient.addColorStop(0.8, "#ff2200");
+                headGradient.addColorStop(1, "rgba(255, 0, 0, 0)");
+
+                ctx.fillStyle = headGradient;
+                ctx.beginPath();
+                ctx.arc(meteor.x, meteor.y, meteor.radius + 6, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Solid core
+                ctx.fillStyle = "#fff";
+                ctx.beginPath();
+                ctx.arc(meteor.x, meteor.y, meteor.radius * 0.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                // If meteor leaves screen
+                if (meteor.x > width + 50 || meteor.y > height + 50) {
+                    meteor = null;
+                    lastMeteorTime = Date.now();
+                    canvas.style.cursor = "default";
+                }
+            }
+
+            // Draw explosion particles
+            for (let i = explosionParticles.length - 1; i >= 0; i--) {
+                const p = explosionParticles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vx *= 0.96;
+                p.vy *= 0.96;
+                p.life -= p.decay;
+
+                if (p.life <= 0) {
+                    explosionParticles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 8;
+                ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+                ctx.restore();
+            }
 
             requestAnimationFrame(drawStarfield);
         }
